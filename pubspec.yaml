@@ -19,7 +19,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   flame: ^1.6.0
-  pixelify_flutter: ^0.0.1
+  google_fonts: ^8.0.0
 
 dev_dependencies:
   flutter_test:
