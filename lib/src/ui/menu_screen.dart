@@ -1,4 +1,5 @@
 import 'package:angry_sigma/src/core/states/game_state.dart';
+import 'package:angry_sigma/src/ui/setting_screen.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-
+  bool _showUI = true;
 
   @override
   void initState() {
@@ -39,10 +40,13 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
 
           // Overlay Flutter UI on top
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+          AnimatedOpacity(
+            opacity: _showUI ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                 const GlitchText(
                   text: 'ANGRY SIGMA',
                   fontSize: 50,
@@ -55,19 +59,42 @@ class _MenuScreenState extends State<MenuScreen> {
                   onPressed: () {
                     // Start game logic here
                     context.read<GameState>().startGame();
+
                   },
                 ),
                 const SizedBox(height: 20),
                 PixelButton(
                   text: '   SETTINGS  ',
                   backgroundColor: const Color(0xFF1E88E5),
-                  onPressed: () {
+                  onPressed: () async {
                     // Settings logic here
                     context.read<GameState>().openSetting();
+                    setState(() {
+                      _showUI = false;
+                    });
+                    await Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, _, __) => const SettingScreen(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                    if (mounted) {
+                      setState(() {
+                        _showUI = true;
+                      });
+                    }
                   },
                 ),
               ],
             ),
+          ),
           ),
         ],
       ),
