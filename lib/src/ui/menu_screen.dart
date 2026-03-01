@@ -1,5 +1,7 @@
+import 'package:angry_sigma/src/core/states/game_state.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../core/background_game.dart';
 import '../core/components/glitch_text.dart';
 import '../core/components/pixel_button.dart';
@@ -12,16 +14,13 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  late final BackgroundGame _game;
+
 
   @override
   void initState() {
     super.initState();
-    _game = BackgroundGame(
-      assetPath: 'bg/menu.png',
-      backgroundMusicPath: 'sound/bg.mp3',
-      musicVolume: 0.5,
-    );
+
+    context.read<GameState>().startBackgroundGame();
   }
 
   @override
@@ -32,7 +31,7 @@ class _MenuScreenState extends State<MenuScreen> {
           // Fullscreen Flame background
           Positioned.fill(
             child: GameWidget(
-              game: _game,
+              game:  context.watch<GameState>().game,
               loadingBuilder: (context) => const ColoredBox(
                 color: Colors.black,
               ),
