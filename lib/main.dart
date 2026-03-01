@@ -1,10 +1,17 @@
 import 'package:angry_sigma/src/core/states/game_state.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'src/ui/menu_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Set fullscreen and landscape orientation
+  await Flame.device.fullScreen();
+  await Flame.device.setLandscape();
+
   runApp(const MyApp());
 }
 
