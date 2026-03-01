@@ -17,7 +17,11 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
-    _game = BackgroundGame(assetPath: 'bg/menu.png');
+    _game = BackgroundGame(
+      assetPath: 'bg/menu.png',
+      backgroundMusicPath: 'sound/bg.mp3',
+      musicVolume: 0.5,
+    );
   }
 
   @override
