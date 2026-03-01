@@ -70,6 +70,7 @@ class _SettingScreenState extends State<SettingScreen> {
               onPressed: () {
                 // Start game logic here
                 Navigator.pop(context);
+                context.read<GameState>().startButtonEff();
               },
             ),
           ],

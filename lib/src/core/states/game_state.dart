@@ -29,16 +29,11 @@ class GameState extends ChangeNotifier {
   }
 
   // start the game function
-  void startGame(){
+  void startButtonEff(){
     AudioManager().playSoundEffect('btn_sound.mp3', volume: 0.7);
     notifyListeners();
   }
 
-  // open the settings
-  void openSetting(){
-    AudioManager().playSoundEffect('btn_sound.mp3', volume: _isMuted ? 0 : 0.7);
-    notifyListeners();
-  }
 
   void setVolume(double value) {
     _volume = value;
