@@ -10,12 +10,16 @@ class GameState extends ChangeNotifier {
 
     double _volume = 0.5;
     bool _isMuted = false;
+    int _currentLevel = 1;
+    int _maxUnlockedLevel = 1;
 
     static const String _volumeKey = 'audio_volume';
     static const String _muteKey = 'audio_muted';
 
     double get volume => _volume;
     bool get isMuted => _isMuted;
+    int get currentLevel => _currentLevel;
+    int get maxUnlockedLevel => _maxUnlockedLevel;
 
     GameState() {
       _loadSettings();
@@ -76,5 +80,20 @@ class GameState extends ChangeNotifier {
     }
     _saveSettings();
     notifyListeners();
+  }
+
+  void selectLevel(int level) {
+    if (level <= _maxUnlockedLevel) {
+      _currentLevel = level;
+      startButtonEff();
+      notifyListeners();
+    }
+  }
+
+  void unlockNextLevel() {
+    if (_currentLevel == _maxUnlockedLevel && _maxUnlockedLevel < 5) {
+      _maxUnlockedLevel++;
+      notifyListeners();
+    }
   }
 }

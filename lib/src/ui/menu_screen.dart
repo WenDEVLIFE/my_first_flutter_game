@@ -1,4 +1,5 @@
 import 'package:angry_sigma/src/core/states/game_state.dart';
+import 'package:angry_sigma/src/ui/level_selection_screen.dart';
 import 'package:angry_sigma/src/ui/setting_screen.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -56,10 +57,30 @@ class _MenuScreenState extends State<MenuScreen> {
                 PixelButton(
                   text: 'START GAME',
                   backgroundColor: const Color(0xFFE53935), // Red to match Glitch text
-                  onPressed: () {
-                    // Start game logic here
+                  onPressed: () async {
+                    // Settings logic here
                     context.read<GameState>().startButtonEff();
-
+                    setState(() {
+                      _showUI = false;
+                    });
+                    await Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, _, __) => const LevelSelectionScreen(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                    if (mounted) {
+                      setState(() {
+                        _showUI = true;
+                      });
+                    }
                   },
                 ),
                 const SizedBox(height: 20),
