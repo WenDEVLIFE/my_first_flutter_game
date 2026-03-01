@@ -54,6 +54,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   backgroundColor: const Color(0xFFE53935), // Red to match Glitch text
                   onPressed: () {
                     // Start game logic here
+                    context.read<GameState>().startGame();
                   },
                 ),
                 const SizedBox(height: 20),
@@ -62,6 +63,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   backgroundColor: const Color(0xFF1E88E5),
                   onPressed: () {
                     // Settings logic here
+                    context.read<GameState>().openSetting();
                   },
                 ),
               ],
