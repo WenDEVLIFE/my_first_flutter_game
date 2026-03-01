@@ -31,6 +31,7 @@ class _MenuScreenState extends State<MenuScreen> {
       body: Stack(
         children: [
           // Fullscreen Flame background
+          if (!context.watch<GameState>().isInLevel)
           Positioned.fill(
             child: GameWidget(
               game:  context.watch<GameState>().game,

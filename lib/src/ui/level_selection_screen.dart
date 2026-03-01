@@ -4,6 +4,11 @@ import 'package:provider/provider.dart';
 import '../core/components/glitch_text.dart';
 import '../core/components/pixel_button.dart';
 import '../core/states/game_state.dart';
+import 'levels/level_1_screen.dart';
+import 'levels/level_2_screen.dart';
+import 'levels/level_3_screen.dart';
+import 'levels/level_4_screen.dart';
+import 'levels/level_5_screen.dart';
 
 class LevelSelectionScreen extends StatelessWidget {
   const LevelSelectionScreen({super.key});
@@ -37,8 +42,23 @@ class LevelSelectionScreen extends StatelessWidget {
                       onPressed: isUnlocked
                           ? () {
                               gameState.selectLevel(level);
-                              // For now just pop back to menu
-                              Navigator.pop(context);
+                              
+                              Widget screen;
+                              switch (level) {
+                                case 1: screen = const Level1Screen(); break;
+                                case 2: screen = const Level2Screen(); break;
+                                case 3: screen = const Level3Screen(); break;
+                                case 4: screen = const Level4Screen(); break;
+                                case 5: screen = const Level5Screen(); break;
+                                default: screen = const Level1Screen();
+                              }
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => screen,
+                                ),
+                              );
                             }
                           : null,
                     );

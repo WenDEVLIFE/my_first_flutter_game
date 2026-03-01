@@ -12,6 +12,7 @@ class GameState extends ChangeNotifier {
     bool _isMuted = false;
     int _currentLevel = 1;
     int _maxUnlockedLevel = 1;
+    bool _isInLevel = false;
 
     static const String _volumeKey = 'audio_volume';
     static const String _muteKey = 'audio_muted';
@@ -20,6 +21,7 @@ class GameState extends ChangeNotifier {
     bool get isMuted => _isMuted;
     int get currentLevel => _currentLevel;
     int get maxUnlockedLevel => _maxUnlockedLevel;
+    bool get isInLevel => _isInLevel;
 
     GameState() {
       _loadSettings();
@@ -47,6 +49,7 @@ class GameState extends ChangeNotifier {
 
     // start the game
     void startBackgroundGame() {
+    _isInLevel = false;
     game = BackgroundGame(
       assetPath: 'bg/menu.png',
       backgroundMusicPath: 'bg.mp3',
@@ -85,6 +88,15 @@ class GameState extends ChangeNotifier {
   void selectLevel(int level) {
     if (level <= _maxUnlockedLevel) {
       _currentLevel = level;
+      _isInLevel = true;
+      
+      // Update background for the selected level
+      game = BackgroundGame(
+        assetPath: 'bg/lvl$level.png',
+        backgroundMusicPath: 'bg.mp3',
+        musicVolume: _isMuted ? 0.0 : _volume,
+      );
+      
       startButtonEff();
       notifyListeners();
     }
