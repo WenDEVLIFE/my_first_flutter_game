@@ -1,6 +1,7 @@
 import 'package:angry_sigma/src/core/background_game.dart';
 import 'package:angry_sigma/src/core/services/audio_manager.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GameState extends ChangeNotifier {
 
@@ -10,12 +11,34 @@ class GameState extends ChangeNotifier {
     double _volume = 0.5;
     bool _isMuted = false;
 
+    static const String _volumeKey = 'audio_volume';
+    static const String _muteKey = 'audio_muted';
+
     double get volume => _volume;
     bool get isMuted => _isMuted;
 
     GameState() {
-      // Sync initial volume
-      AudioManager().setBackgroundMusicVolume(_volume);
+      _loadSettings();
+    }
+
+    Future<void> _loadSettings() async {
+      final prefs = await SharedPreferences.getInstance();
+      _volume = prefs.getDouble(_volumeKey) ?? 0.5;
+      _isMuted = prefs.getBool(_muteKey) ?? false;
+      
+      // Apply initial settings
+      if (_isMuted) {
+        await AudioManager().setBackgroundMusicVolume(0);
+      } else {
+        await AudioManager().setBackgroundMusicVolume(_volume);
+      }
+      notifyListeners();
+    }
+
+    Future<void> _saveSettings() async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble(_volumeKey, _volume);
+      await prefs.setBool(_muteKey, _isMuted);
     }
 
     // start the game
@@ -23,14 +46,14 @@ class GameState extends ChangeNotifier {
     game = BackgroundGame(
       assetPath: 'bg/menu.png',
       backgroundMusicPath: 'bg.mp3',
-      musicVolume: 0.1,
+      musicVolume: _isMuted ? 0.0 : _volume,
     );
     notifyListeners();
   }
 
   // start the game function
   void startButtonEff(){
-    AudioManager().playSoundEffect('btn_sound.mp3', volume: 0.7);
+    AudioManager().playSoundEffect('btn_sound.mp3', volume: _isMuted ? 0.0 : 0.7);
     notifyListeners();
   }
 
@@ -40,6 +63,7 @@ class GameState extends ChangeNotifier {
     if (!_isMuted) {
       AudioManager().setBackgroundMusicVolume(_volume);
     }
+    _saveSettings();
     notifyListeners();
   }
 
@@ -50,6 +74,7 @@ class GameState extends ChangeNotifier {
     } else {
       AudioManager().setBackgroundMusicVolume(_volume);
     }
+    _saveSettings();
     notifyListeners();
   }
 }
